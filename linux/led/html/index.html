@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>远程控制LED显示系统</title>
+<meta name="keywords" content="single, slider, free templates, website templates, CSS, HTML" />
+<meta name="description" content="Single Slider is a free CSS template provided by templatemo.com" />
+<link href="css/templatemo_style.css" rel="stylesheet" type="text/css" />
+
+<script src="js/jquery-1.2.6.min.js" type="text/javascript"></script>
+<script src="js/jquery.easing.1.3.js" type="text/javascript"></script>
+<script src="js/jquery.kwicks-1.5.1.pack.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	$().ready(function() {  
+		$('.kwicks').kwicks({  
+			max : 710,  
+			spacing : 0,  
+			sticky: true,
+		});  
+	}); 
+</script>
+
+<link rel="icon" href="/dir/favicon" mce_href="/dir/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> 
+<script type="text/JavaScript" src="js/slimbox2.js"></script> 
+
+<!-- 显示时间 -->
+<script language="javascript">
+		//获取当前的日期与时间以及周数
+		function getCurDate()
+		{
+				//创建一个Date类，里面包含当前的时间与日期
+				//需要进行处理以适合自己的需求
+				 var d = new Date();
+				//周
+				 var week;
+				//利用当前日期是本周的第几天来输出汉字版周数
+				 switch (d.getDay()){
+					 case 1: week="周一"; break;
+					 case 2: week="周二"; break;
+					 case 3: week="周三"; break;
+					 case 4: week="周四"; break;
+					 case 5: week="周五"; break;
+					 case 6: week="周六"; break;
+					 default: week="周日";
+				 }
+				//获取年
+				 var years = d.getFullYear();
+				//获取月
+				 var month = add_zero(d.getMonth()+1);
+				//获取日
+				 var days = add_zero(d.getDate());
+				//获取时
+				 var hours = add_zero(d.getHours());
+				//获取分
+				 var minutes = add_zero(d.getMinutes());
+				//获取秒
+				 var seconds=add_zero(d.getSeconds());
+				//最后组合成我们想要的格式
+				 var ndate = years+"-"+month+"-"+days+" "+week+" "+hours+":"+minutes+":"+seconds;
+				//获取页面上的systimeshow对象，用于将自己写好的日期格式输出到该对象上
+				 var divT=document.getElementById("systimeshow"); 
+				//输出到该对象上
+				divT.innerHTML= ndate;
+			}
+			//自定义函数，对各位数的日期进行处理
+			//如果是各位数，则前面加零，否则原样返回
+			function add_zero(temp)
+			{
+				if(temp<10) 
+					return "0"+temp;
+				else
+					return temp;
+			}
+			//每隔1秒运行一次，以使日期能动态进行显示
+			//以毫秒为单位，1000毫秒等于1秒
+			setInterval("getCurDate()",1000); 
+
+</script>
+
+<!-- 测试效果 -->
+<script language="javascript" type="text/javascript">
+		//总的速度值
+		var selectValue=30;
+		function scroll(obj) {
+			var tmp = (obj.scrollLeft)++;
+			//当滚动条到达右边顶端时
+			if (obj.scrollLeft==tmp) obj.innerHTML += obj.innerHTML;
+			if (obj.firstChild.offsetWidth==tmp) obj.innerHTML = obj.innerHTML;
+			//当滚动条滚动了初始内容的宽度时滚动条回到最左端
+			if (obj.scrollLeft>=obj.firstChild.offsetWidth) obj.scrollLeft=0;
+			
+		}
+		//间隔selectValue存放的毫秒数执行一次演示模块
+		setInterval("scroll(document.getElementById('scrollobj'))",selectValue);
+</script>
+
+<!-- 设置 MARQUEE 显示内容 -->
+<Script language="javascript" type="text/javascript">
+		function set(){
+			//获取输入模块的字符串
+			var text = document.getElementById('text').value;
+			//赋值给演示模块
+			//document.getElementById('scrollobj_test').innerHTML=text;
+
+			//速度级别的单选按钮组
+			var radio=document.getElementsByName('sudu');
+			var i=0;
+			//找出用户选择的速度
+			for(i=0;i<radio.length;i++)
+			{
+				if(radio[i].checked == true)
+				{
+					//传给总的速度，计算最后的速度值
+					selectValue=radio[i].value*10;
+					//alert(selectValue);
+					break;
+				}
+			}
+		}
+		function stop(){
+			//document.getElementById('scrollobj_test').innerHTML='';
+		}	
+</Script>
+
+<!-- 分页 -->
+<Script language="javascript" type="text/javascript">
+	
+	$(function(){
+		var flag=0;
+		$('#prev').click(function(){
+			if(flag==0){
+				return false;
+			}else{
+				$(".show1").css("display","block");
+				$(".show2").css("display","none");
+				flag=0;
+			}
+		})
+		$('#next').click(function(){
+			if(flag==0){
+				flag=1;
+				$(".show2").css("display","block");
+				$(".show1").css("display","none");
+				
+				}else{
+					return false;
+			}
+		})
+		
+	})
+
+/*	function show(id){
+			//alert(id);
+			if(id == 1){
+				$(".show1").css("display","block");
+				$(".show2").css("display","none");
+				//alert(id);
+
+			}
+			if( id == 2 ){
+				$(".show2").css("display","block");
+				$(".show1").css("display","none");
+				//alert(id);
+			}
+			//alert("借宿");
+		}
+	
+*/		
+</Script>
+
+<style type="text/css">
+.show2{
+	display:none;
+
+}
+</style>	
+</head>
+
+<body>
+<div id="templatemo_wrapper">
+	<div id="templatemo_main">
+	
+		<div id="site_title">
+			<TABLE border=0 cellSpacing=0 cellPadding=0 width=950 background="000" align=center height=40>
+				<TBODY>
+					<TR>
+						<TD height=66 width=150>
+						<!-- 显示自己定义好格式的日期 -->
+							<span id="systimeshow" style="color:#cfcfcf; FONT-SIZE:15px;">
+								<script language="javascript">getCurDate();</script>
+							</span>
+						</TD>
+
+						<TD width=800>
+						<!-- 模拟LED显示屏，显示欢迎文字，文字是流动性的 -->
+							<MARQUEE style="FILTER: glow(color=red); LINE-HEIGHT: 60px; WIDTH: 100%; COLOR: #ff0; FONT-SIZE: 45px; text-shadow: #f00 1px 1px 0px" scrollAmount=8>
+								<B><FONT face=Verdana>欢迎进入远程控制LED显示系统</FONT></B>
+							</MARQUEE>
+						</TD>
+					</TR>
+				</TBODY>
+			</TABLE>
+		</div>
+		
+		<div id="templatemo_content">
+			<ul class="kwicks">
+			
+				<li id="home"><span class="header"></span>
+					<div class="inner">
+						<h2>主页</h2>
+						<p><em>现代社会已进入信息时代，信息传播占有越来越重要的地位，同时人们对视觉媒体的要求也愈来愈高。近年，随着各项技术的迅速发展，半导体制作工艺日趋成熟，使得LED显示屏的应用范围日益扩大。</em></p>
+						<img src="images/templatemo_image_01.jpg" alt="Image 01" class="image_fl" />
+						<div class="col_half float_r">
+							<p><a href="#">LED显示屏</a>是20世纪90年代出现的新型平板显示器件，以其超大的显示画面、丰富的显示内容、灵活多变的显示方式，逐渐成为国际上显示系统的主流。作为LED产业的重要分支，我国led显示屏行业经过二十余年的发展，已经成长为LED领域最为成熟的一个细分市场。从单双色到全彩，从户外到室内，从高清到智能......市场对led显示屏提出了更高的要求，也为led显示屏行业注入了新的发展机遇。 </p>
+							<p>本系统是采用S5PV210为实验平台作为Web服务器，利用Linux主机作为远程控制的客户端，开发出来一个远程控制LED显示系统。</p>
+						</div>
+					</div>
+				</li>
+			
+				<li id="about"><span class="header"></span>
+					<div class="inner">
+						<h2>关于</h2>
+						<img src="images/templatemo_image_02.jpg" alt="Image 02" class="image_fr" />
+						<p><em><a href="#">LED （Light Emitting Diode）</a>，发光二极管，是一种能够将电能转化为可见光的固态的半导体器件。LED 的心脏是一个半导体的晶片，晶片的一端附在一个支架上，一端是负极，另一端连接电源的正极，使整个晶片被环氧树脂封装起来。当电流通过导线作用于这个晶片的时候，电子就会被推向其PN 结的P 区，在P 区里电子跟空穴复合，然后就会以光子的形式发出能量，这就是LED发光的原理。而光的波长也就是光的颜色，是由形成P-N结的材料决定的。LED显示屏就是一种由一个个小的LED模块面板组成的平板显示器，一般用来显示文字、图像、视频、录像信号等各种信息。</em></p>
+						
+						<p>LED显示屏的种类较多，大致有以下四种<a href="#">分类</a>法：一是按室内室外分类，二是按工作方式分类，三是按颜色的数量分类，四是按LED管的单位密度大小分类。</p>
+						<p>不同类型显示屏用途不同，各有优缺点，可根据需要侧重<a href="#">选择</a>。室内LED显示屏与户外LED显示屏差别很大。首先是亮度不同，室内的发光亮度要比户外屏低出几倍到几十倍；把室内显示屏放在室外就像把电视机放在室外一样亮度不够。因此，户外屏必须采用超高亮度LED，而且为了进一步提高亮度和增加可视距离，在一个像素内往往要封装多只超高亮度LED。其次，户外屏须防（雨）水、防阳光直射、防尘、防高温、防风、防雷击等，而室内屏则无需考虑这些问题。</p>
+					</div>
+				</li>
+			
+				<li id="social"><span class="header"></span>
+					<div class="inner">
+						<h2>现状与发展</h2>
+						<p><em>LED显示屏是<a href="#">八十年代后期</a>在全球迅速<a href="#">发展</a>起来的新型信息显示媒体，以其超大的显示画面、丰富的显示内容、灵活多变的显示方式，逐渐成为国际上显示系统的主流。而我国也并不例外，随着我国显示产业的不断兴起，现在已经形成了一条比较完整的产业链，各生产企业也都在积极开发和研制先进的LED显示技术。</em></p>
+						<h4>行业消息</h4>
+						<ul class="templatemo_list">
+				
+							<li class="show1" ><a href="#" class="s1">南韩科学家开发出石墨烯OLED面板</a>
+								<span>2017/4/12</span> 
+							</li>
+							<li class="show1"><a href="#" class="s2">电子纸屏技术进军IOT应用</a>
+								<span>2017/4/11</span> 
+							</li>
+							<li class="show1"><a href="#" class="s3">2020东京奥运要这样在空中显示国旗和比分</a>
+								<span>2017/3/29</span> 
+							</li>
+							<li class="show1"><a href="#" class="s4">最轻金属结构材料问世 LED箱体有望更轻量化</a>
+								<span>2017/3/7</span> 
+							</li>
+							<li class="show1"><a href="#" class="s5">小间距LED拼接器应用的技术分析</a>
+								<span>2017/3/21</span> 
+							</li>
+						
+						
+							<li class="show2" style="display:none;" ><a href="#" class="s6">改善使用环境可延长LED显示屏的寿命！</a>
+								<span>2017/3/13</span> 
+							</li>
+							<li class="show2" style="display:none;"  ><a href="#" class="s6">LED显示屏各类色度处理技术</a>
+								<span>2017/3/1</span> 
+							</li>
+						</ul>
+					
+						<hr style="color:#eee;"></hr>
+						
+						<!--<a href="#" onclick="show(1)" >  上一页 </a>
+						<a href="#" onclick="show(2)" >  下一页 </a>	-->
+						
+						
+						
+						<a href="javascript:;" id="prev" >  上一页 </a>
+						<a href="javascript:;" id="next" >  下一页 </a>
+					
+						<span>共2页</span>
+					</div>
+				</li>
+			
+				<li id="portfolio"><span class="header"></span>
+					<div class="inner">
+						<h2>应用领域</h2>
+						<ul id="gallery">
+							<li><a href="images/apply/0l-l.jpg" rel="lightbox[apply]" title="交通领域"><img src="images/apply/01.jpg" alt="Image 01" /></a></li>
+							<li><a href="images/apply/02-l.jpg" rel="lightbox[apply]" title="金融领域"><img src="images/apply/02.jpg" alt="Image 02" /></a></li>
+							<li><a href="images/apply/03-l.jpg" class="no_margin_right" rel="lightbox[apply]" title="视频会议领域"><img src="images/apply/03.jpg" alt="Image 03" /></a></li>
+							<li><a href="images/apply/04-l.jpg" rel="lightbox[apply]" title="体育领域"><img src="images/apply/04.jpg" alt="Image 04" /></a></li>
+							<li><a href="images/apply/05-l.jpg" rel="lightbox[apply]" title="主题公园领域"><img src="images/apply/05.jpg" alt="Image 05" /></a></li>
+							<li><a href="images/apply/06-l.jpg" class="no_margin_right" rel="lightbox[apply]" title="军事领域"><img src="images/apply/06.jpg" alt="Image 06" /></a></li>
+						</ul>
+					</div>
+				</li>
+				
+				<li id="contact"><span class="header"></span>
+					<div class="inner">
+						<h2>测试成果</h2>
+						<p>利用网络将本机电脑与S5PV210嵌入式设备连接，然后在本机上访问S5PV210嵌入式设备的IP地址进入前台网页以实现系统测试。</p>
+						<h3>以下是LED显示系统的修改页面：</h3>
+						<div id="contact_form"  class="col_w280 float_l">
+							
+							<form method="post"  action="./cgi-bin/led.cgi" align=center >
+								
+								<br />
+								<!--<TABLE border=0 cellSpacing=0 cellPadding=0 width=60 background=images/led.png align=center >
+									<TD>
+										<div id="scrollobj">
+											<span id="scrollobj_test">0</span>
+										</div>
+									</TD>
+								</TABLE>-->
+                                				
+								<br />
+								<label>请输入LED显示内容(0~9)：</label>	
+								
+								<input type="text" name="text" id="text" size="30"/>
+								<br /><br />
+								<label>请选择LED显示的流动速率：</label>
+							
+								<input type="radio" name="sudu" value="1" />1
+								<input type="radio" name="sudu" value="2" checked=true />2
+								<input type="radio" name="sudu" value="3" />3
+								<br /><br />
+                                
+                                				<!-- submit按钮是提交的意思，即单击该按钮提交到服务器，在提交之前会执行onclick里面的函数 -->
+								<input type="submit" id="test" value="执行" onclick="set()"/>
+								
+								<br /><br />
+							</form>
+
+
+						</div>
+                        
+                        
+						
+					</div>
+				</li>
+			
+			</ul>	
+		</div> <!-- END of content -->
+	</div> <!-- END of templatemo_main -->
+	
+    <div id="templatemo_footer">基于Linux的远程LED显示屏控制系统 | 来自嵌入式实验室318 | 韩越</div>
+</div> <!-- END of templatemo_wrapper -->
+
+</body>
+</html>
