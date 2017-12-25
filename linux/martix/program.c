@@ -6,22 +6,13 @@
 #include <fcntl.h>
 #include <string.h>
 
-#define CLEAR() printf("\033[2J");
-#define MOVETO(x, y) printf("\033[%d;%dH", (y), (x));
-#define RESET_CURSOR() printf("\033[H");
-#define HIDE_CURSOR() printf("\033[?251");
-#define SHOW_CURSOR() printf("\033[?25h");
-unsigned char stext[] = {0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80};
+#define deal(x, y) (((1<<x)|((~(1<<y))<<8)))
+#define show(x, y) ioctl(fd, 0, deal(7-x, y))
 
 static int fd = -1;
-// void show(int x, int y){
-// 	MOVETO(x, y);
-// 	printf("*");
-// }
 
-#define deal(x, y) (((1<<x)|((~(1<<y))<<8)))
-#define show(x, y) ioctl(fd, 0, deal(x, y))
-
+unsigned char read_char[50] = {"1"};     //read char
+unsigned char key[32];
 void Sleep(int ms){
     struct timeval delay;
     delay.tv_sec = 0;
@@ -47,7 +38,7 @@ void text(unsigned char data[], int position){
     if(position >= 0)
     {   for(i = 0; i < 8; i ++)
         {
-         set((data[i] >> position)|(data[i]>>(8-position)), i);
+         set((data[i] >> position)|(data[i]<<(8-position)), i);
         }
     }
     else if(position<0)
@@ -64,8 +55,6 @@ void text(unsigned char data[], int position){
 unsigned char mask[8] = {
     0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
 };
-unsigned char read_char[5] = {"B"};     //read char
-unsigned char key[32];
 void readFont(unsigned char read_char[], unsigned char key[32]){
     int fd = open("16x16/hzk16k", O_RDONLY);
     int len = 0, i;
@@ -93,7 +82,6 @@ void toConvertGB2312(unsigned char read_char[]){
         read_char[0] = 0xA3;
         read_char[1] = temp|0x80;
     }
-    //printf("\nGB2312:%x %x\n", read_char[0], read_char[1]);
 }
 //will 16*16 point font to convert 8*8 point font
 //arithmetic coordinate to divide 2
@@ -110,17 +98,44 @@ void Convert16To8(
             if(flag)
             {
                 //will bit set 1
-                output_str[i/2] |= mask[j/2];
+                int ty = ((i * 10)/2+5)/10;
+                int tx = ((j * 10)/2+5)/10;
+                ty = (ty>=8)?(7):ty;
+                tx = (tx>=8)?(7):tx;
+                output_str[(i*10/2+5)/10] |= mask[(j*10/2+5)/10];
             } 
         }
     }
 }
 void initDevice(){
-    fd = open("/dev/stepper", O_RDWR);
+    fd = open("/dev/matrixled", O_RDWR);
     if(fd < 0)
     {
         printf("Can't open\n");
     }
+}
+
+void inputParam(){
+    int len;
+    char *lenstr;
+    char buffer[128];
+    lenstr = getenv("CONTENT_LENGTH");
+    if(lenstr == NULL)
+    {
+        printf("param error!");
+    }
+    else
+    {
+        len = atoi(lenstr);
+        fgets(buffer, len + 1, stdin);
+        if(sscanf(buffer, "text=%[^&]", read_char) != 1)
+        {
+            printf("param error\n");
+            return;
+        }
+    }
+    printf("Content-Type:text/plain;charset=us-ascii\r\n");
+    
 }
 int main(void){
     unsigned char show_text[8];
@@ -128,7 +143,7 @@ int main(void){
     int i, j, k;
     //init
     memset(show_text, 0, sizeof(show_text));
-    printf("please input a str:\n");
+    inputParam();
     //scanf("%s", read_char);
     printf("convert before encoding:");
     for(i = 0; i < 5; i ++)
@@ -170,11 +185,23 @@ int main(void){
     }
     printf("\n");
     initDevice();       //init device
-    while(true)
+    i = 0;
+    j = 0;
+    while(j < 1)
     {
-    	//CLEAR();
         text(show_text, position);
-        Sleep(1000);
+        if(i > 500)
+        {
+            i = 0;
+            position ++;
+            if(position >= 8)
+             {
+                 position = 0;
+                 j ++;
+             }
+        }
+        i ++;
     }
+    close(fd);
 	return 0;
 }
